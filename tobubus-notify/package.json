@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "build": "tsc",
-    "serve": "node dist/index.js"
+    "serve": "node dist/index.js",
+    "webhook": "tsx src/webhook.ts"
   },
   "dependencies": {
     "cheerio": "^1.0.0",

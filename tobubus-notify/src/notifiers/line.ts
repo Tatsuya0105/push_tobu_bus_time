@@ -5,12 +5,12 @@ const LINE_API_URL = "https://api.line.me/v2/bot/message/push";
 export class LineNotifier implements Notifier {
   constructor(
     private channelAccessToken: string,
-    private userId: string,
+    private userIds: string[],
   ) {
     if (!channelAccessToken) {
       throw new Error("LINE_CHANNEL_ACCESS_TOKEN is not set");
     }
-    if (!userId) {
+    if (userIds.length === 0) {
       throw new Error("LINE_USER_ID is not set");
     }
   }
@@ -19,7 +19,7 @@ export class LineNotifier implements Notifier {
     if (approaches.length === 0) return;
 
     const message = this.buildMessage(approaches);
-    await this.send(message);
+    await Promise.all(this.userIds.map((id) => this.send(message, id)));
   }
 
   private buildMessage(approaches: BusApproach[]): string {
@@ -60,9 +60,9 @@ export class LineNotifier implements Notifier {
     return lines.join("\n");
   }
 
-  private async send(text: string): Promise<void> {
+  private async send(text: string, userId: string): Promise<void> {
     const body = {
-      to: this.userId,
+      to: userId,
       messages: [{ type: "text", text }],
     };
 
