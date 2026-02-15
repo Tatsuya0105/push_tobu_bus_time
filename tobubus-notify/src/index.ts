@@ -14,13 +14,16 @@ function loadConfig(): Config {
     ),
     notification: (process.env.NOTIFICATION_TYPE as Config["notification"]) ?? "console",
     lineChannelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN ?? "",
-    lineUserId: process.env.LINE_USER_ID ?? "",
+    lineUserIds: (process.env.LINE_USER_ID ?? "")
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean),
   };
 }
 
 function createNotifier(config: Config): Notifier {
   if (config.notification === "line") {
-    return new LineNotifier(config.lineChannelAccessToken, config.lineUserId);
+    return new LineNotifier(config.lineChannelAccessToken, config.lineUserIds);
   }
   return new ConsoleNotifier();
 }

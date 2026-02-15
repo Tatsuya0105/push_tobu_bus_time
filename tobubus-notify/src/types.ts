@@ -26,7 +26,7 @@ export interface Config {
   delayThresholdMinutes: number;
   notification: "line" | "console";
   lineChannelAccessToken: string;
-  lineUserId: string;
+  lineUserIds: string[];
 }
 
 export interface Notifier {
